@@ -18,3 +18,8 @@ variable "name" {
   description = "Name tag for the subnet"
   type        = string
 }
+
+variable "availability_zone" {
+  description = "Availability zone for the subnet"
+  type        = string
+}

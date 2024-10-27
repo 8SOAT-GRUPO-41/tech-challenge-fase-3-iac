@@ -42,3 +42,13 @@ variable "name" {
   description = "Name tag for the RDS instance"
   type        = string
 }
+
+variable "subnet_group_name" {
+  description = "Name for the DB subnet group"
+  type        = string
+}
+
+variable "subnet_ids" {
+  description = "List of subnet IDs"
+  type        = list(string)
+}
