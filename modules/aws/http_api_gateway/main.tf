@@ -18,11 +18,6 @@ resource "aws_apigatewayv2_stage" "this" {
   name        = var.stage_name
   auto_deploy = var.auto_deploy
 
-  access_log_settings {
-    destination_arn = var.access_log_destination_arn
-    format          = var.access_log_format
-  }
-
   default_route_settings {
     throttling_burst_limit = var.default_route_throttling_burst_limit
     throttling_rate_limit  = var.default_route_throttling_rate_limit
