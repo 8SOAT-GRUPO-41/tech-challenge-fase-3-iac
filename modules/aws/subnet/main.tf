@@ -5,6 +5,7 @@ resource "aws_subnet" "this" {
   availability_zone       = var.availability_zone
 
   tags = {
-    Name = var.name
+    Name        = var.name
+    Provisioner = "Terraform"
   }
 }
