@@ -58,3 +58,11 @@ module "lanchonete_rds" {
     module.lanchonete_db_private_subnet_b.subnet_id
   ]
 }
+
+module "lanchonete_http_api" {
+  source = "./modules/aws/http_api_gateway"
+
+  name          = "lanchonete-http-api"
+  protocol_type = "HTTP"
+  stage_name    = "$default"
+}
