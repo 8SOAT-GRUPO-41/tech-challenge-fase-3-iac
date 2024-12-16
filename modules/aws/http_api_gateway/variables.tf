@@ -35,13 +35,13 @@ variable "access_log_format" {
 
 variable "default_route_throttling_burst_limit" {
   type        = number
-  default     = null
+  default     = 1000
   description = "Throttling burst limit for the default route."
 }
 
 variable "default_route_throttling_rate_limit" {
   type        = number
-  default     = null
+  default     = 1000
   description = "Throttling rate limit for the default route."
 }
 
@@ -75,21 +75,26 @@ variable "cors_max_age" {
   description = "How long the results of a preflight request can be cached."
 }
 
-# Future variables for Lambda Authorizer and backend integration:
-# variable "lambda_authorizer_uri" {
-#   type        = string
-#   default     = null
-#   description = "URI of the lambda authorizer function."
-# }
-#
-# variable "lambda_authorizer_identity_sources" {
-#   type        = list(string)
-#   default     = []
-#   description = "List of identity sources for the authorizer."
-# }
-#
-# variable "backend_integration_uri" {
-#   type        = string
-#   default     = null
-#   description = "URI for the backend integration (Lambda or EKS service)."
-# }
+variable "vpc_link_name" {
+  type        = string
+  default     = null
+  description = "Name of the VPC link."
+}
+
+variable "vpc_link_subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of subnet IDs for the VPC link."
+}
+
+variable "vpc_link_security_group_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of security group IDs for the VPC link."
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "Map of tags to assign to the resource."
+}

@@ -3,12 +3,18 @@ resource "aws_eks_node_group" "this" {
   node_group_name = var.node_group_name
   node_role_arn   = var.node_role_arn
 
-  subnet_ids = var.subnet_ids
+  subnet_ids     = var.subnet_ids
+  disk_size      = 50
+  instance_types = ["t3.medium"]
 
   scaling_config {
     desired_size = var.desired_size
     max_size     = var.max_size
     min_size     = var.min_size
+  }
+
+  update_config {
+    max_unavailable = 1
   }
 
   tags = var.tags
