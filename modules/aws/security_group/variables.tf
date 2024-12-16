@@ -22,3 +22,8 @@ variable "name" {
   description = "Name tag for the security group"
   type        = string
 }
+
+variable "ingress_security_groups" {
+  description = "Security groups for ingress"
+  type        = list(string)
+}

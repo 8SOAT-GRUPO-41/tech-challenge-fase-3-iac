@@ -5,6 +5,15 @@ data "aws_iam_role" "lab_role" {
   name = "LabRole"
 }
 
+data "aws_lb" "eks_nlb" {
+  name = var.eks_nlb_name
+}
+
+data "aws_lb_listener" "eks_listener" {
+  load_balancer_arn = data.aws_lb.eks_nlb.arn
+  port              = 80
+}
+
 #######################################
 # VPC
 #######################################
@@ -194,12 +203,10 @@ resource "aws_route_table_association" "lanchonete_public_rtb" {
 # Security Groups
 #######################################
 module "lanchonete_rds_sg" {
-  source           = "./modules/aws/security_group"
-  vpc_id           = module.lanchonete_vpc.vpc_id
-  ingress_port     = 5432
-  ingress_protocol = "tcp"
-  # Adjust ingress_cidr_blocks to restrict traffic; for testing you can leave as 0.0.0.0/0 
-  # but ideally you'd allow only EKS worker nodes or a known CIDR
+  source              = "./modules/aws/security_group"
+  vpc_id              = module.lanchonete_vpc.vpc_id
+  ingress_port        = 5432
+  ingress_protocol    = "tcp"
   ingress_cidr_blocks = ["0.0.0.0/0"]
   name                = "lanchonete-rds-sg"
 }
@@ -303,4 +310,22 @@ module "eks" {
   tags = {
     Provisioner = "Terraform"
   }
+}
+
+#######################################
+# Integration between API Gateway and EKS
+#######################################
+resource "aws_apigatewayv2_integration" "eks_integration" {
+  api_id             = module.lanchonete_http_api.api_id
+  integration_type   = "HTTP_PROXY"
+  integration_uri    = data.aws_lb_listener.eks_listener.arn
+  connection_type    = "VPC_LINK"
+  connection_id      = module.lanchonete_http_api.vpc_link_id
+  integration_method = "ANY"
+}
+
+resource "aws_apigatewayv2_route" "eks_route" {
+  api_id    = module.lanchonete_http_api.api_id
+  route_key = "ANY /{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.eks_integration.id}"
 }
