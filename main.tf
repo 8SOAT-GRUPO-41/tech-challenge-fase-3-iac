@@ -139,6 +139,16 @@ resource "aws_route_table_association" "lanchonete_public_rta" {
   route_table_id = module.lanchonete_public_rt.route_table_id
 }
 
+resource "aws_route_table_association" "eks_private_rta_a" {
+  subnet_id      = module.lanchonete_eks_private_subnet_a.subnet_id
+  route_table_id = module.lanchonete_private_rt.route_table_id
+}
+
+resource "aws_route_table_association" "eks_private_rta_b" {
+  subnet_id      = module.lanchonete_eks_private_subnet_b.subnet_id
+  route_table_id = module.lanchonete_private_rt.route_table_id
+}
+
 #######################################
 # Security Groups
 #######################################
