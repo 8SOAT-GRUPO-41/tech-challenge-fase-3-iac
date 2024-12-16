@@ -202,7 +202,6 @@ module "lanchonete_eks_cluster" {
   source = "./modules/aws/eks_cluster"
 
   cluster_name    = "lanchonete-eks-cluster"
-  version         = "1.31"
   role_arn        = data.aws_iam_role.lab_role.arn
   private_subnets = [module.lanchonete_eks_private_subnet_a.subnet_id, module.lanchonete_eks_private_subnet_b.subnet_id]
 }
