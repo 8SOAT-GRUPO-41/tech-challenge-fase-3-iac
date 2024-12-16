@@ -1,3 +1,7 @@
+data "aws_iam_role" "lab_role" {
+  name = "LabRole"
+}
+
 module "lanchonete_vpc" {
   source     = "./modules/aws/vpc"
   cidr_block = "10.0.0.0/16"
@@ -19,6 +23,24 @@ module "lanchonete_db_private_subnet_b" {
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = false
   name                    = "lanchonete-private-subnet-b"
+  availability_zone       = "us-east-1b"
+}
+
+module "lanchonete_eks_private_subnet_a" {
+  source                  = "./modules/aws/subnet"
+  vpc_id                  = module.lanchonete_vpc.vpc_id
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = false
+  name                    = "lanchonete-eks-private-subnet-a"
+  availability_zone       = "us-east-1a"
+}
+
+module "lanchonete_eks_private_subnet_b" {
+  source                  = "./modules/aws/subnet"
+  vpc_id                  = module.lanchonete_vpc.vpc_id
+  cidr_block              = "10.0.3.0/24"
+  map_public_ip_on_launch = false
+  name                    = "lanchonete-eks-private-subnet-b"
   availability_zone       = "us-east-1b"
 }
 
@@ -65,4 +87,32 @@ module "lanchonete_http_api" {
   name          = "lanchonete-http-api"
   protocol_type = "HTTP"
   stage_name    = "$default"
+}
+
+module "lanchonete_eks_cluster" {
+  source = "./modules/aws/eks_cluster"
+
+  cluster_name = "lanchonete-eks-cluster"
+  role_arn     = data.aws_iam_role.lab_role.arn
+  private_subnets = [
+    module.lanchonete_eks_private_subnet_a.subnet_id,
+    module.lanchonete_eks_private_subnet_b.subnet_id
+  ]
+  security_group_ids  = [module.lanchonete_rds_sg.security_group_id]
+  authentication_mode = "API_AND_CONFIG_MAP"
+}
+
+module "lanchonete_eks_node_group" {
+  source = "./modules/aws/eks_node_group"
+
+  cluster_name    = module.lanchonete_eks_cluster.cluster_name
+  node_group_name = "lanchonete-eks-node-group"
+  node_role_arn   = data.aws_iam_role.lab_role.arn
+  subnet_ids = [
+    module.lanchonete_eks_private_subnet_a.subnet_id,
+    module.lanchonete_eks_private_subnet_b.subnet_id
+  ]
+  tags = {
+    Provisioner = "Terraform"
+  }
 }
