@@ -188,11 +188,12 @@ module "lanchonete_rds" {
 # HTTP API Gateway
 #######################################
 module "lanchonete_http_api" {
-  source        = "./modules/aws/http_api_gateway"
-  name          = "lanchonete-http-api"
-  vpc_link_name = "lanchonete-vpc-link"
-  protocol_type = "HTTP"
-  stage_name    = "$default"
+  source              = "./modules/aws/http_api_gateway"
+  name                = "lanchonete-http-api"
+  vpc_link_name       = "lanchonete-vpc-link"
+  vpc_link_subnet_ids = [module.lanchonete_eks_private_subnet_a.subnet_id, module.lanchonete_eks_private_subnet_b.subnet_id]
+  protocol_type       = "HTTP"
+  stage_name          = "$default"
 }
 
 #######################################
