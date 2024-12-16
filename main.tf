@@ -213,7 +213,7 @@ module "lanchonete_rds_sg" {
 #######################################
 module "db_password_secret" {
   source        = "./modules/aws/secrets_manager_secret"
-  name          = "lanchonete-db-password"
+  name          = "lanchonete-db-pwd"
   secret_string = "postgres"
   tags = {
     Provisioner = "Terraform"
