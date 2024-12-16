@@ -4,8 +4,5 @@ resource "aws_subnet" "this" {
   map_public_ip_on_launch = var.map_public_ip_on_launch
   availability_zone       = var.availability_zone
 
-  tags = {
-    Name        = var.name
-    Provisioner = "Terraform"
-  }
+  tags = var.tags
 }

@@ -23,3 +23,9 @@ variable "availability_zone" {
   description = "Availability zone for the subnet"
   type        = string
 }
+
+variable "tags" {
+  description = "Tags to apply to the subnet"
+  type        = map(string)
+  default     = {}
+}
