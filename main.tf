@@ -85,6 +85,7 @@ module "lanchonete_http_api" {
   source = "./modules/aws/http_api_gateway"
 
   name          = "lanchonete-http-api"
+  vpc_link_name = "lanchonete-vpc-link"
   protocol_type = "HTTP"
   stage_name    = "$default"
 }
@@ -116,3 +117,13 @@ module "lanchonete_eks_node_group" {
     Provisioner = "Terraform"
   }
 }
+
+# resource "aws_apigatewayv2_integration" "eks_integration" {
+#   api_id                 = module.lanchonete_http_api.api_id
+#   integration_type       = "HTTP_PROXY"
+#   connection_type        = "VPC_LINK"
+#   connection_id          = module.lanchonete_http_api.vpc_link_id
+#   # integration_uri        = data.aws_lb.eks_service_lb.arn
+#   integration_method     = "GET"
+#   payload_format_version = "2.0"
+# }

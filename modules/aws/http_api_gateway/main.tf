@@ -10,6 +10,8 @@ resource "aws_apigatewayv2_api" "this" {
     expose_headers = var.cors_expose_headers
     max_age        = var.cors_max_age
   }
+
+  tags = var.tags
 }
 
 resource "aws_apigatewayv2_stage" "this" {
@@ -24,13 +26,19 @@ resource "aws_apigatewayv2_stage" "this" {
   }
 }
 
-# In the future, you might want to add a lambda authorizer:
-# resource "aws_apigatewayv2_authorizer" "lambda_authorizer" {
-#   api_id           = aws_apigatewayv2_api.this.id
-#   authorizer_type  = "REQUEST"
-#   authorizer_uri   = var.lambda_authorizer_uri
-#   identity_sources  = var.lambda_authorizer_identity_sources
-# }
+resource "aws_apigatewayv2_vpc_link" "this" {
+  name       = var.vpc_link_name
+  subnet_ids = var.vpc_link_subnet_ids
+
+  security_group_ids = var.vpc_link_security_group_ids
+
+  tags = var.tags
+}
+
+# TODO:
+# 1. Subir uma rota
+# 2. Subir uma integração (EKS)
+# 3. Subir um autorizador (Lambda)
 
 # Example integration with a Lambda function or EKS service:
 # resource "aws_apigatewayv2_integration" "backend_integration" {
@@ -49,4 +57,3 @@ resource "aws_apigatewayv2_stage" "this" {
 #   # authorization_type = "CUSTOM"
 #   # authorizer_id      = aws_apigatewayv2_authorizer.lambda_authorizer.id
 # }
-
