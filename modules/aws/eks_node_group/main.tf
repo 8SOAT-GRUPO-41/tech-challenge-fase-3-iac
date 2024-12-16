@@ -5,7 +5,7 @@ resource "aws_eks_node_group" "this" {
 
   subnet_ids     = var.subnet_ids
   disk_size      = 50
-  instance_types = ["t3.medium"]
+  instance_types = ["t3.micro"]
 
   scaling_config {
     desired_size = var.desired_size
