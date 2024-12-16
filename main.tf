@@ -261,7 +261,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.1.0"
 
-  cluster_name    = "lanchonete-eks-cluster"
+  cluster_name    = "lanchonete-g41-cluster"
   cluster_version = "1.31"
 
   create_iam_role = false
