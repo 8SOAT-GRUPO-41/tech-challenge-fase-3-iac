@@ -7,17 +7,18 @@ variable "private_subnets" {
   type        = list(any)
 }
 
-variable "security_group_ids" {
-  description = "Security group IDs"
-  type        = list(any)
-}
-
-variable "authentication_mode" {
-  description = "The authentication mode for the EKS cluster"
-  type        = string
-}
-
 variable "role_arn" {
   description = "The ARN of the role that provides permissions for the EKS cluster"
   type        = string
+}
+
+variable "version" {
+  description = "The desired Kubernetes version for the EKS cluster"
+  type        = string
+}
+
+variable "depends_on" {
+  description = "A list of resources that the EKS cluster depends on"
+  type        = list(any)
+  default     = []
 }

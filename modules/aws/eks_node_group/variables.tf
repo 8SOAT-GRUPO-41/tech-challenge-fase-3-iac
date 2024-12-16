@@ -40,3 +40,9 @@ variable "tags" {
   type        = map(string)
   description = "A map of tags to assign to the EKS node group"
 }
+
+variable "disk_size" {
+  type        = number
+  description = "The size of the EBS volume to attach to each worker node"
+  default     = 20
+}
