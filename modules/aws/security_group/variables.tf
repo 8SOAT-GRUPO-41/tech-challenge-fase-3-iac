@@ -26,4 +26,5 @@ variable "name" {
 variable "ingress_security_groups" {
   description = "Security groups for ingress"
   type        = list(string)
+  default     = []
 }
