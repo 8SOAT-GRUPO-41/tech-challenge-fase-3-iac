@@ -55,7 +55,6 @@ module "lanchonete_eks_private_subnet_a" {
   availability_zone       = "us-east-1a"
 
   tags = {
-    "kubernetes.io/cluster/lanchonete-eks-cluster" = "shared"
     "kubernetes.io/role/internal-elb"              = "1"
     "Name"                                         = "lanchonete-eks-private-subnet-a"
   }
@@ -70,7 +69,6 @@ module "lanchonete_eks_private_subnet_b" {
   availability_zone       = "us-east-1b"
 
   tags = {
-    "kubernetes.io/cluster/lanchonete-eks-cluster" = "shared"
     "kubernetes.io/role/internal-elb"              = "1"
     "Name"                                         = "lanchonete-eks-private-subnet-b"
   }
@@ -85,7 +83,6 @@ module "lanchonete_public_subnet_a" {
   name                    = "lanchonete-public-subnet-a"
   availability_zone       = "us-east-1a"
   tags = {
-    "kubernetes.io/cluster/lanchonete-eks-cluster" = "shared"
     "kubernetes.io/role/elb"                       = "1"
     "Name"                                         = "lanchonete-public-subnet-a"
   }
@@ -99,7 +96,6 @@ module "lanchonete_public_subnet_b" {
   name                    = "lanchonete-public-subnet-b"
   availability_zone       = "us-east-1b"
   tags = {
-    "kubernetes.io/cluster/lanchonete-eks-cluster" = "shared"
     "kubernetes.io/role/elb"                       = "1"
     "Name"                                         = "lanchonete-public-subnet-b"
   }
