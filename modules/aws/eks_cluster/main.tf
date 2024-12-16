@@ -6,6 +6,4 @@ resource "aws_eks_cluster" "this" {
   vpc_config {
     subnet_ids = var.private_subnets
   }
-
-  depends_on = var.depends_on
 }
