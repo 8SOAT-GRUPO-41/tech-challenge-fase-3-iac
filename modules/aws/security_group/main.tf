@@ -2,10 +2,11 @@ resource "aws_security_group" "this" {
   vpc_id = var.vpc_id
 
   ingress {
-    from_port   = var.ingress_port
-    to_port     = var.ingress_port
-    protocol    = var.ingress_protocol
-    cidr_blocks = var.ingress_cidr_blocks
+    from_port       = var.ingress_port
+    to_port         = var.ingress_port
+    protocol        = var.ingress_protocol
+    cidr_blocks     = var.ingress_cidr_blocks
+    security_groups = var.ingress_security_groups
   }
 
   egress {
@@ -16,7 +17,7 @@ resource "aws_security_group" "this" {
   }
 
   tags = {
-    Name = var.name
+    Name        = var.name
     Provisioner = "Terraform"
   }
 }
