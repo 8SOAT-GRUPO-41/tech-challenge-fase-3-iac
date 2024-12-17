@@ -52,3 +52,18 @@ variable "subnet_ids" {
   description = "List of subnet IDs"
   type        = list(string)
 }
+
+variable "db_name" {
+  description = "Database name"
+  type        = string
+}
+
+variable "engine_version" {
+  description = "Engine version"
+  type        = string
+}
+
+variable "parameter_group_name" {
+  description = "Parameter group name"
+  type        = string
+}

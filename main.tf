@@ -200,50 +200,16 @@ resource "aws_route_table_association" "lanchonete_public_rtb" {
 }
 
 #######################################
-# Security Groups
-#######################################
-module "lanchonete_rds_sg" {
-  source              = "./modules/aws/security_group"
-  vpc_id              = module.lanchonete_vpc.vpc_id
-  ingress_port        = 5432
-  ingress_protocol    = "tcp"
-  ingress_cidr_blocks = ["0.0.0.0/0"]
-  name                = "lanchonete-rds-sg"
-}
-
-#######################################
 # Secrets Manager
 #######################################
-module "db_password_secret" {
-  source        = "./modules/aws/secrets_manager_secret"
-  name          = "lanchonete-db-pwd"
-  secret_string = "postgres"
-  tags = {
-    Provisioner = "Terraform"
-  }
-}
-
-#######################################
-# RDS Instance
-#######################################
-module "lanchonete_rds" {
-  source                 = "./modules/aws/rds"
-  identifier             = "lanchonete"
-  engine                 = "postgres"
-  instance_class         = "db.t3.micro"
-  allocated_storage      = 10
-  username               = "postgres"
-  password               = module.db_password_secret.secret_id
-  publicly_accessible    = false
-  vpc_security_group_ids = [module.lanchonete_rds_sg.security_group_id]
-  name                   = "lanchonete-rds"
-  subnet_group_name      = "lanchonete-subnet-group"
-
-  subnet_ids = [
-    module.lanchonete_db_private_subnet_a.subnet_id,
-    module.lanchonete_db_private_subnet_b.subnet_id
-  ]
-}
+# module "db_password_secret" {
+#   source        = "./modules/aws/secrets_manager_secret"
+#   name          = "lanchonete-db-pwd"
+#   secret_string = "postgres"
+#   tags = {
+#     Provisioner = "Terraform"
+#   }
+# }
 
 #######################################
 # HTTP API Gateway
@@ -255,6 +221,11 @@ module "lanchonete_http_api" {
   vpc_link_subnet_ids = [module.lanchonete_eks_private_subnet_a.subnet_id]
   protocol_type       = "HTTP"
   stage_name          = "$default"
+
+  tags = {
+    Name        = "lanchonete-http-api"
+    Provisioner = "Terraform"
+  }
 }
 
 #######################################
@@ -324,8 +295,8 @@ resource "aws_apigatewayv2_integration" "eks_integration" {
   integration_method = "ANY"
 }
 
-resource "aws_apigatewayv2_route" "eks_route" {
+resource "aws_apigatewayv2_route" "docs_route" {
   api_id    = module.lanchonete_http_api.api_id
-  route_key = "ANY /{proxy+}"
+  route_key = "GET /docs"
   target    = "integrations/${aws_apigatewayv2_integration.eks_integration.id}"
 }
