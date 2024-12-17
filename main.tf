@@ -221,6 +221,11 @@ module "lanchonete_http_api" {
   vpc_link_subnet_ids = [module.lanchonete_eks_private_subnet_a.subnet_id]
   protocol_type       = "HTTP"
   stage_name          = "$default"
+
+  tags = {
+    Name        = "lanchonete-http-api"
+    Provisioner = "Terraform"
+  }
 }
 
 #######################################
