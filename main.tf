@@ -5,15 +5,6 @@ data "aws_iam_role" "lab_role" {
   name = "LabRole"
 }
 
-data "aws_lb" "eks_nlb" {
-  name = var.eks_nlb_name
-}
-
-data "aws_lb_listener" "eks_listener" {
-  load_balancer_arn = data.aws_lb.eks_nlb.arn
-  port              = 80
-}
-
 #######################################
 # VPC
 #######################################
@@ -281,22 +272,4 @@ module "eks" {
   tags = {
     Provisioner = "Terraform"
   }
-}
-
-#######################################
-# Integration between API Gateway and EKS
-#######################################
-resource "aws_apigatewayv2_integration" "eks_integration" {
-  api_id             = module.lanchonete_http_api.api_id
-  integration_type   = "HTTP_PROXY"
-  integration_uri    = data.aws_lb_listener.eks_listener.arn
-  connection_type    = "VPC_LINK"
-  connection_id      = module.lanchonete_http_api.vpc_link_id
-  integration_method = "ANY"
-}
-
-resource "aws_apigatewayv2_route" "docs_route" {
-  api_id    = module.lanchonete_http_api.api_id
-  route_key = "GET /docs"
-  target    = "integrations/${aws_apigatewayv2_integration.eks_integration.id}"
 }
