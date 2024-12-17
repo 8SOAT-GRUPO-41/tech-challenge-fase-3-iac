@@ -5,15 +5,6 @@ data "aws_iam_role" "lab_role" {
   name = "LabRole"
 }
 
-data "aws_lb" "eks_nlb" {
-  name = var.eks_nlb_name
-}
-
-data "aws_lb_listener" "eks_listener" {
-  load_balancer_arn = data.aws_lb.eks_nlb.arn
-  port              = 80
-}
-
 #######################################
 # VPC
 #######################################
