@@ -10,6 +10,7 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_db_instance" "this" {
   identifier               = var.identifier
   engine                   = var.engine
+  engine_version           = var.engine_version
   instance_class           = var.instance_class
   allocated_storage        = var.allocated_storage
   username                 = var.username
@@ -19,6 +20,8 @@ resource "aws_db_instance" "this" {
   db_subnet_group_name     = aws_db_subnet_group.this.name
   skip_final_snapshot      = true
   delete_automated_backups = true
+  db_name                  = var.db_name
+  parameter_group_name     = var.parameter_group_name
 
   tags = {
     Name        = var.name
