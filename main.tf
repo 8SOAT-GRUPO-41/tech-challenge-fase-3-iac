@@ -273,3 +273,32 @@ module "eks" {
     Provisioner = "Terraform"
   }
 }
+
+#######################################
+# Cognito User Pool
+#######################################
+
+resource "aws_cognito_user_pool" "lanchonete_user_pool" {
+  name                     = "lanchonete-user-pool"
+  auto_verified_attributes = ["email"]
+  tags = {
+    Provisioner = "Terraform"
+  }
+}
+
+resource "aws_cognito_user_pool_client" "lanchonete_user_pool_client" {
+  name            = "lanchonete-user-pool-client"
+  user_pool_id    = aws_cognito_user_pool.lanchonete_user_pool.id
+  generate_secret = true
+
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows                  = ["code", "implicit"]
+  allowed_oauth_scopes                 = ["email", "openid", "profile"]
+  callback_urls                        = ["http://localhost:8080/"]
+
+  supported_identity_providers = ["COGNITO"]
+}
+resource "aws_cognito_user_pool_domain" "lanchonete_user_pool_domain" {
+  domain       = "lanchonete-user-pool-domain"
+  user_pool_id = aws_cognito_user_pool.lanchonete_user_pool.id
+}
