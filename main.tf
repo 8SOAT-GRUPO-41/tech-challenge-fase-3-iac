@@ -295,8 +295,8 @@ resource "aws_apigatewayv2_integration" "eks_integration" {
   integration_method = "ANY"
 }
 
-resource "aws_apigatewayv2_route" "eks_route" {
+resource "aws_apigatewayv2_route" "docs_route" {
   api_id    = module.lanchonete_http_api.api_id
-  route_key = "ANY /{proxy+}"
+  route_key = "GET /docs"
   target    = "integrations/${aws_apigatewayv2_integration.eks_integration.id}"
 }
